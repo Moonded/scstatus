@@ -1,0 +1,9 @@
+{
+    "Status":[
+        "Operational",
+        "Degraded Performance",
+        "Partial Outage",
+        "Major Outage",
+        "Under Maintenance"
+    ]
+}
