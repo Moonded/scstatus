@@ -10,7 +10,7 @@ const {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("discovery")
-    .setDescription("Info Module")
+    .setDescription("Report a discovery")
     .addStringOption((option) =>
       option
         .setName("system")
@@ -27,11 +27,8 @@ module.exports = {
         .setDescription("Selecet the Version")
         .setRequired(true)
         .addChoices(
-          { name: "3.17", value: "3.17" },
-          { name: "3.16", value: "3.16" },
-          { name: "3.15", value: "3.15" },
-          { name: "3.14", value: "3.14" },
-          { name: "3.13", value: "3.13" }
+          { name: "Live", value: "Live" },
+          { name: "PTU", value: "PTU" }
         )
     )
     .addStringOption((option) =>
@@ -64,43 +61,44 @@ module.exports = {
     const modal = new ModalBuilder()
         .setCustomId("DiscoveryModal")
         .setTitle("Discovery"),
-      squadronnameInput = new TextInputBuilder()
-        .setCustomId("squadronnameInput")
-        .setLabel("SQUADRON NAME (Optional)")
+      orgInput = new TextInputBuilder()
+        .setCustomId("organisationInput")
+        .setLabel("ORGANISATION NAME (Optional)")
         .setStyle(TextInputStyle.Short)
-        .setPlaceholder("No Squadron")
+        .setPlaceholder("Give us your Org Name (No link)")
         .setRequired(false),
       celestrialInput = new TextInputBuilder()
         .setCustomId("celestrialbodyInput")
         .setLabel("CELESTIAL BODY")
         .setStyle(TextInputStyle.Short)
-        .setRequired(false),
+        .setRequired(true),
       coordinatesInput = new TextInputBuilder()
         .setCustomId("coordinatesInput")
         .setLabel("COORDINATES")
         .setStyle(TextInputStyle.Paragraph)
-        .setRequired(false),
+        .setRequired(true),
       locationInput = new TextInputBuilder()
         .setCustomId("locationInput")
         .setLabel("NAME OF YOUR LOCATION")
         .setStyle(TextInputStyle.Short)
-        .setRequired(false),
+        .setRequired(true),
       observationInput = new TextInputBuilder()
         .setCustomId("observationInput")
         .setLabel("OBSERVATIONS (Optional)")
         .setStyle(TextInputStyle.Paragraph)
+        .setPlaceholder("No Observations")
         .setRequired(false),
-      Squadron = new ActionRowBuilder().addComponents(squadronnameInput),
+      Organisation = new ActionRowBuilder().addComponents(orgInput),
       Celestrial = new ActionRowBuilder().addComponents(celestrialInput),
       Coordiantes = new ActionRowBuilder().addComponents(coordinatesInput),
       Location = new ActionRowBuilder().addComponents(locationInput),
       Observations = new ActionRowBuilder().addComponents(observationInput);
-      
+
     modal.addComponents(
       Celestrial,
       Location,
       Coordiantes,
-      Squadron,
+      Organisation,
       Observations
     );
 

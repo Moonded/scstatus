@@ -9,19 +9,22 @@ require("console-stamp")(console, {
 });
 dotenv.config();
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+global.client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMembers,
+  ],
+});
 
 client.commands = new Collection();
 
 const eventsPath = path.join(__dirname, "events");
-const eventFiles = fs
-  .readdirSync(eventsPath)
-  .filter((file) => file.endsWith(".js"));
+const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith(".js"));
 
-const commandsPath = path.join(__dirname, "commands");
-const commandFiles = fs
-  .readdirSync(commandsPath)
-  .filter((file) => file.endsWith(".js"));
+const commandsPath = path.join(__dirname, "commandsGlobal");
+const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith(".js"));
 
 for (const file of commandFiles) {
   const filePath = path.join(commandsPath, file);

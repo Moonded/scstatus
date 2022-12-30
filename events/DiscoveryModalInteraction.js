@@ -1,52 +1,39 @@
 // import { Events } from 'discord.js';
-const { Events, EmbedBuilder } = require("discord.js");
-const fs = require("fs");
-const postData = require("../lib/post.js");
-
-const map = new Map();
+const { Events, EmbedBuilder } = require("discord.js"),
+  fs = require("fs"),
+  postData = require("../lib/post.js"),
+  guildSettings = require("../lib/guildSettings.js"),
+  crypto = require("crypto"),
+  map = new Map();
 
 module.exports = {
   name: Events.InteractionCreate,
   async execute(interaction) {
+    map.set("user", interaction.user.id);
+    map.set("uuid", crypto.randomUUID());
     if (interaction.isCommand() && interaction.commandName == "discovery") {
       map.set("system", interaction.options.getString("system"));
       map.set("version", interaction.options.getString("version"));
       map.set("poi_type", interaction.options.getString("poi_type"));
     }
-    if (
-      interaction.isModalSubmit() &&
-      interaction.customId == "DiscoveryModal"
-    ) {
-      map.set(
-        "squadron",
-        interaction.fields.getTextInputValue("squadronnameInput") || "N/A"
-      );
-      map.set(
-        "celestrial",
-        interaction.fields.getTextInputValue("celestrialbodyInput") || "N/A"
-      );
-      map.set(
-        "coordiante",
-        interaction.fields.getTextInputValue("coordinatesInput") || "N/A"
-      );
-      map.set(
-        "location",
-        interaction.fields.getTextInputValue("locationInput") || "N/A"
-      );
-      map.set(
-        "observation",
-        interaction.fields.getTextInputValue("observationInput") || "N/A"
-      );
-
-      map.set("user", interaction.user.id);
-      postData("http://localhost:3000/discovery", [...map]).then((data) => {
-        console.log(data); // JSON data parsed by `data.json()` call
+    if (interaction.isModalSubmit() && interaction.customId == "DiscoveryModal") {
+      interaction.fields.fields.forEach(function (value, key) {
+        switch (key) {
+          case "organisationInput":
+            map.set(key, value.value || "No Organisation");
+            break;
+          case "observationInput":
+            map.set(key, value.value || "No Observation");
+            break;
+          default:
+            map.set(key, value.value || "N/A");
+        }
       });
 
-     
-
-      const userDiscovery = "Discovery by " + interaction.user.username;
-
+      const guildId = guildSettings(interaction.guildId);
+      if (guildId.settings.serverUpload == true) {
+        postData(guildId.settings.discoveryUploadURI, [...map]);
+      }
       const exampleEmbed = new EmbedBuilder()
         .setColor(0x00ff00)
         .setTitle("Discovery Report Card")
@@ -54,17 +41,18 @@ module.exports = {
           { value: map.get("system"), name: "System", inline: true },
           { value: map.get("version"), name: "Version", inline: true },
           { value: map.get("poi_type"), name: "POI Type", inline: true },
-          { value: map.get("celestrial"), name: "Celestrial", inline: true },
-          { value: map.get("location"), name: "Location", inline: true },
-          { value: map.get("coordiante"), name: "Coordiante", inline: true },
-          { value: map.get("squadron"), name: "Squadron", inline: true },
-          { value: "\u200B", name: "\u200B", inline: true },
-          { value: map.get("observation"), name: "Overview", inline: true }
+          { value: map.get("celestrialbodyInput"), name: "Celestrial", inline: true },
+          { value: map.get("locationInput"), name: "Location", inline: true },
+          { value: map.get("coordinatesInput"), name: "Coordiante", inline: true },
+          { value: map.get("organisationInput"), name: "Organisation", inline: true },
+          { value: interaction.user.username, name: "Discoverd by", inline: true },
+          { value: map.get("observationInput"), name: "Overview", inline: true }
+          // { value: "\u200B", name: "\u200B", inline: true },
         )
         .setTimestamp()
-        .setFooter({ text: userDiscovery });
+        .setFooter({ text: map.get("uuid") });
 
-      await interaction.reply({ embeds: [exampleEmbed], ephemeral: true });
+      await interaction.reply({ embeds: [exampleEmbed] });
     }
   },
 };

@@ -5,8 +5,14 @@ const express = require("express"),
   app = express(),
   port = 3000,
   jsonParser = bodyParser.json(),
-  urlencodedParser = bodyParser.urlencoded({ extended: false });
-fs = require("fs");
+  urlencodedParser = bodyParser.urlencoded({ extended: false }),
+  fs = require("fs"),
+  prisma = require("@prisma/client"),
+  prismaClient = new prisma.PrismaClient();
+
+require("console-stamp")(console, {
+  format: ":date(HH:MM:ss.l).white :label()",
+});
 
 app.get("/", async (req, res) => {
   const data = JSON.parse(await dataFetch("endpoints"));
@@ -30,6 +36,7 @@ app.get("/incidents", async (req, res) => {
 
 app.get("/status", async (req, res) => {
   const data = JSON.parse(await dataFetch("html_status"));
+
   res.json(data);
 });
 
@@ -53,15 +60,20 @@ app.post("/discovery", jsonParser, async (req, res) => {
   });
 
   const data = JSON.parse(await dataFetch("discovery"));
-  var obj
+  var obj;
   obj = [...data, object];
   // console.log(obj);
-
+  console.log("Logging new Discovery object");
   dataWrite("discovery", JSON.stringify(obj));
 
   // console.log('Converted Object: ', object);
 });
 
+app.get("/r/g/:page", async (req, res) => {
+  console.log(req.params.page);
+  res.redirect(301, `https://robertsspaceindustries.com/galactapedia/article/${req.params.page}`);
+});
+
 app.listen(port, () => {
-  console.log(`Example app listening on port http://localhost:${port}`);
+  console.log(`API Started, awaiting requests on port ${port}`);
 });

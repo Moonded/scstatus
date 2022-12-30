@@ -1,12 +1,13 @@
 {
   "dependencies": {
+    "@prisma/client": "^4.8.0",
     "@types/express": "4",
     "@types/node": "16",
     "body-parser": "^1.20.1",
     "concurrently": "^7.6.0",
     "console-stamp": "^3.1.0",
     "cron": "^2.1.0",
-    "discord.js": "^14.7.1",
+    "discord.js": "^14.7.2-dev.1672229059-3160ab0.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "node-cron": "^3.0.2",
@@ -18,12 +19,15 @@
     "typescript": "^4.9.4"
   },
   "scripts": {
-    "dev": "concurrently --names \"DISCORD,HTTP   ,DEPLOY ,CRON   \" -c \"blue,green,magenta,cyan\" \"nodemon -q main\" \"nodemon -q api/entry\" \"node deploy-commands\" \"node jobs/cron \""
+    "dev": "concurrently --names \"DISCORD,HTTP   ,DEPLOY ,CRON   \" -c \"blue,green,magenta,cyan\" \"nodemon -q main\" \"nodemon -q api/entry\" \"node deploy-global\" \"node jobs/status \""
   },
   "nodemonConfig": {
     "ignore": [
       "**/db/**",
       "**/docs/**"
     ]
+  },
+  "devDependencies": {
+    "prisma": "^4.8.0"
   }
 }

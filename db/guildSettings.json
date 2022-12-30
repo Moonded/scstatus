@@ -1,0 +1,18 @@
+[
+  {
+    "id": "421412271772794880",
+    "settings": {
+      "serverUpload": false,
+      "discoveryUploadURI": "http://localhost:3000/discovery",
+      "UploadUsers": [220278978898821121]
+    }
+  },
+  {
+    "id": "474241342692655105",
+    "settings": {
+      "serverUpload": false,
+      "discoveryUploadURI": "http://localhost:3000/discovery",
+      "UploadUsers": [220278978898821121]
+    }
+  }
+]

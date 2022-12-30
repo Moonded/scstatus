@@ -2,9 +2,9 @@
 const { Events } = require('discord.js');
 
 module.exports = {
-	name: Events.ClientReady,
+	name: Events.GuildDelete,
 	once: true,
-	execute(client) {
-		console.log(`BOT Started: ${client.user.tag}`);
+	execute(guild) {
+		console.log("LEAVE: "+ guild.name + " (" + guild.id + ")");
 	},
 };
