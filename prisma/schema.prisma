@@ -47,3 +47,11 @@ model Galactapedia {
     category String[]
     tags     String[]
 }
+
+model Users {
+    username      String  @unique
+    allowUploads  Boolean @default(false)
+    allowRequests Boolean @default(false)
+    allowPatches  Boolean @default(false)
+    allowEdits    Boolean @default(false)
+}
