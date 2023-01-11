@@ -9,7 +9,7 @@ require("console-stamp")(console, {
 
 console.log("Starting Up Cron Job");
 
-var job = new CronJob("* * * * * *", async (err) => {
+var job = new CronJob("*/10 * * * *", async (err) => {
   if (err) {
     console.error(err);
   }
