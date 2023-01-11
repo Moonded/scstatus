@@ -20,7 +20,7 @@
     "typescript": "^4.9.4"
   },
   "scripts": {
-    "dev": "concurrently --names \"DISCORD,HTTP   ,DEPLOY ,CRON   \" -c \"blue,green,magenta,cyan\" \"nodemon -q main\" \"nodemon -q api/entry\" \"node deploy-global\" \"node jobs/status \""
+    "dev": "concurrently --names \"DISCORD,HTTP   ,DEPLOY \" -c \"blue,green,magenta\" \"nodemon -q main\" \"nodemon -q api/entry\" \"node deploy-global\""
   },
   "nodemonConfig": {
     "ignore": [
