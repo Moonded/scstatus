@@ -1,8 +1,8 @@
-const fs = require("fs");
-const path = require("path");
-const dotenv = require("dotenv");
-const { Client, Events, GatewayIntentBits, Collection } = require("discord.js");
-const fetchPage = require("./lib/fetch");
+const fs = require("fs"),
+  path = require("path"),
+  dotenv = require("dotenv"),
+  { Client, Events, GatewayIntentBits, Collection } = require("discord.js"),
+  fetchPage = require("./lib/fetch");
 
 require("console-stamp")(console, {
   format: ":date(HH:MM:ss.l).white :label()",
@@ -15,16 +15,21 @@ global.client = new Client({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildVoiceStates,
   ],
 });
 
 client.commands = new Collection();
 
 const eventsPath = path.join(__dirname, "events");
-const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith(".js"));
+const eventFiles = fs
+  .readdirSync(eventsPath)
+  .filter((file) => file.endsWith(".js"));
 
 const commandsPath = path.join(__dirname, "commandsGlobal");
-const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith(".js"));
+const commandFiles = fs
+  .readdirSync(commandsPath)
+  .filter((file) => file.endsWith(".js"));
 
 for (const file of commandFiles) {
   const filePath = path.join(commandsPath, file);
